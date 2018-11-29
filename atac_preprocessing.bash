@@ -195,14 +195,191 @@ I=/root/taka/ATAC-seq/bam/36_A-CLP_2_new_trimmed.fq.gz_Aligned.sortedByCoord.out
 O=/root/taka/ATAC-seq/bam_rmdup/CLP_AGED_2.bam \
 M=/root/taka/ATAC-seq/bam_rmdup/CLP_AGED_2.mfile
 ######################################################################################################################################
+# more TEMP_DELETEME.txt |grep "O="|perl -pe 's/O\=//g'|perl -pe 's/\\//g'|perl -pe 's/^/samtools index /g'|perl -pe 's/\.bam/\.bam &/g'
 
-samtools index /root/ong_dukenus/ATAC-SEQ/bam/shH2_I_1_rmdup.bam &
-samtools index /root/ong_dukenus/ATAC-SEQ/bam/shH2_I_2_rmdup.bam &
-samtools index /root/ong_dukenus/ATAC-SEQ/bam/shH2_II_1_rmdup.bam &
-samtools index /root/ong_dukenus/ATAC-SEQ/bam/shH2_II_2_rmdup.bam &
-samtools index /root/ong_dukenus/ATAC-SEQ/bam/shNT_1_rmdup.bam &
-samtools index /root/ong_dukenus/ATAC-SEQ/bam/shNT_2_rmdup.bam &
+samtools index /root/taka/ATAC-seq/bam_rmdup/HSC_YOUNG_1.bam & 
+samtools index /root/taka/ATAC-seq/bam_rmdup/HSC_YOUNG_2.bam & 
+samtools index /root/taka/ATAC-seq/bam_rmdup/HSC_YOUNG_3.bam & 
+samtools index /root/taka/ATAC-seq/bam_rmdup/HSC_YOUNG_4.bam & 
+samtools index /root/taka/ATAC-seq/bam_rmdup/HSC_AGED_1.bam & 
+samtools index /root/taka/ATAC-seq/bam_rmdup/HSC_AGED_2.bam & 
+samtools index /root/taka/ATAC-seq/bam_rmdup/HSC_AGED_3.bam & 
+samtools index /root/taka/ATAC-seq/bam_rmdup/HSC_AGED_4.bam & 
+samtools index /root/taka/ATAC-seq/bam_rmdup/MPP1_YOUNG_1.bam & 
+samtools index /root/taka/ATAC-seq/bam_rmdup/MPP1_YOUNG_2.bam & 
+samtools index /root/taka/ATAC-seq/bam_rmdup/MPP1_AGED_1.bam & 
+samtools index /root/taka/ATAC-seq/bam_rmdup/MPP1_AGED_2.bam & 
+samtools index /root/taka/ATAC-seq/bam_rmdup/MPP2_YOUNG_1.bam & 
+samtools index /root/taka/ATAC-seq/bam_rmdup/MPP2_YOUNG_2.bam & 
+samtools index /root/taka/ATAC-seq/bam_rmdup/MPP2_AGED_1.bam & 
+samtools index /root/taka/ATAC-seq/bam_rmdup/MPP2_AGED_2.bam & 
+samtools index /root/taka/ATAC-seq/bam_rmdup/MPP3_YOUNG_1.bam & 
+samtools index /root/taka/ATAC-seq/bam_rmdup/MPP3_YOUNG_2.bam & 
+samtools index /root/taka/ATAC-seq/bam_rmdup/MPP3_AGED_1.bam & 
+samtools index /root/taka/ATAC-seq/bam_rmdup/MPP3_AGED_2.bam & 
+samtools index /root/taka/ATAC-seq/bam_rmdup/MPP4_YOUNG_1.bam & 
+samtools index /root/taka/ATAC-seq/bam_rmdup/MPP4_YOUNG_2.bam & 
+samtools index /root/taka/ATAC-seq/bam_rmdup/MPP4_AGED_1.bam & 
+samtools index /root/taka/ATAC-seq/bam_rmdup/MPP4_AGED_2.bam & 
+samtools index /root/taka/ATAC-seq/bam_rmdup/GMP_YOUNG_1.bam & 
+samtools index /root/taka/ATAC-seq/bam_rmdup/GMP_YOUNG_2.bam & 
+samtools index /root/taka/ATAC-seq/bam_rmdup/GMP_AGED_1.bam & 
+samtools index /root/taka/ATAC-seq/bam_rmdup/GMP_AGED_2.bam & 
+samtools index /root/taka/ATAC-seq/bam_rmdup/MEP_YOUNG_1.bam & 
+samtools index /root/taka/ATAC-seq/bam_rmdup/MEP_YOUNG_2.bam & 
+samtools index /root/taka/ATAC-seq/bam_rmdup/MEP_AGED_1.bam & 
+samtools index /root/taka/ATAC-seq/bam_rmdup/MEP_AGED_2.bam & 
+samtools index /root/taka/ATAC-seq/bam_rmdup/CLP_YOUNG_1.bam & 
+samtools index /root/taka/ATAC-seq/bam_rmdup/CLP_YOUNG_2.bam & 
+samtools index /root/taka/ATAC-seq/bam_rmdup/CLP_AGED_1.bam & 
+samtools index /root/taka/ATAC-seq/bam_rmdup/CLP_AGED_2.bam & 
+
+wait
+
+#grep "O=" TEMP_DELETEME.txt|perl -pe 's/O\=//g'|perl -pe 's/\\//g'|perl -pe 's/(.+)/bamCoverage \-p max \-bs 1 \-\-normalizeUsing CPM \\
+#\-b $1 \\
+#\-o $1.bw\n/g'
 
 bamCoverage -p max -bs 1 --normalizeUsing CPM \
--b /root/ong_dukenus/ATAC-SEQ/bam/shH2_I_1_rmdup.bam \
--o /root/ong_dukenus/ATAC-SEQ/bw/shH2_I_1_rmdup.bw
+-b /root/taka/ATAC-seq/bam_rmdup/HSC_YOUNG_1.bam  \
+-o /root/taka/ATAC-seq/bw/HSC_YOUNG_1.bw
+
+bamCoverage -p max -bs 1 --normalizeUsing CPM \
+-b /root/taka/ATAC-seq/bam_rmdup/HSC_YOUNG_2.bam  \
+-o /root/taka/ATAC-seq/bw/HSC_YOUNG_2.bw
+
+bamCoverage -p max -bs 1 --normalizeUsing CPM \
+-b /root/taka/ATAC-seq/bam_rmdup/HSC_YOUNG_3.bam  \
+-o /root/taka/ATAC-seq/bw/HSC_YOUNG_3.bw
+
+bamCoverage -p max -bs 1 --normalizeUsing CPM \
+-b /root/taka/ATAC-seq/bam_rmdup/HSC_YOUNG_4.bam  \
+-o /root/taka/ATAC-seq/bw/HSC_YOUNG_4.bw
+
+bamCoverage -p max -bs 1 --normalizeUsing CPM \
+-b /root/taka/ATAC-seq/bam_rmdup/HSC_AGED_1.bam  \
+-o /root/taka/ATAC-seq/bw/HSC_AGED_1.bw
+
+bamCoverage -p max -bs 1 --normalizeUsing CPM \
+-b /root/taka/ATAC-seq/bam_rmdup/HSC_AGED_2.bam  \
+-o /root/taka/ATAC-seq/bw/HSC_AGED_2.bw
+
+bamCoverage -p max -bs 1 --normalizeUsing CPM \
+-b /root/taka/ATAC-seq/bam_rmdup/HSC_AGED_3.bam  \
+-o /root/taka/ATAC-seq/bw/HSC_AGED_3.bw
+
+bamCoverage -p max -bs 1 --normalizeUsing CPM \
+-b /root/taka/ATAC-seq/bam_rmdup/HSC_AGED_4.bam  \
+-o /root/taka/ATAC-seq/bw/HSC_AGED_4.bw
+
+bamCoverage -p max -bs 1 --normalizeUsing CPM \
+-b /root/taka/ATAC-seq/bam_rmdup/MPP1_YOUNG_1.bam  \
+-o /root/taka/ATAC-seq/bw/MPP1_YOUNG_1.bw
+
+bamCoverage -p max -bs 1 --normalizeUsing CPM \
+-b /root/taka/ATAC-seq/bam_rmdup/MPP1_YOUNG_2.bam  \
+-o /root/taka/ATAC-seq/bw/MPP1_YOUNG_2.bw
+
+bamCoverage -p max -bs 1 --normalizeUsing CPM \
+-b /root/taka/ATAC-seq/bam_rmdup/MPP1_AGED_1.bam  \
+-o /root/taka/ATAC-seq/bw/MPP1_AGED_1.bw
+
+bamCoverage -p max -bs 1 --normalizeUsing CPM \
+-b /root/taka/ATAC-seq/bam_rmdup/MPP1_AGED_2.bam  \
+-o /root/taka/ATAC-seq/bw/MPP1_AGED_2.bw
+
+bamCoverage -p max -bs 1 --normalizeUsing CPM \
+-b /root/taka/ATAC-seq/bam_rmdup/MPP2_YOUNG_1.bam  \
+-o /root/taka/ATAC-seq/bw/MPP2_YOUNG_1.bw
+
+bamCoverage -p max -bs 1 --normalizeUsing CPM \
+-b /root/taka/ATAC-seq/bam_rmdup/MPP2_YOUNG_2.bam  \
+-o /root/taka/ATAC-seq/bw/MPP2_YOUNG_2.bw
+
+bamCoverage -p max -bs 1 --normalizeUsing CPM \
+-b /root/taka/ATAC-seq/bam_rmdup/MPP2_AGED_1.bam  \
+-o /root/taka/ATAC-seq/bw/MPP2_AGED_1.bw
+
+bamCoverage -p max -bs 1 --normalizeUsing CPM \
+-b /root/taka/ATAC-seq/bam_rmdup/MPP2_AGED_2.bam  \
+-o /root/taka/ATAC-seq/bw/MPP2_AGED_2.bw
+
+bamCoverage -p max -bs 1 --normalizeUsing CPM \
+-b /root/taka/ATAC-seq/bam_rmdup/MPP3_YOUNG_1.bam  \
+-o /root/taka/ATAC-seq/bw/MPP3_YOUNG_1.bw
+
+bamCoverage -p max -bs 1 --normalizeUsing CPM \
+-b /root/taka/ATAC-seq/bam_rmdup/MPP3_YOUNG_2.bam  \
+-o /root/taka/ATAC-seq/bw/MPP3_YOUNG_2.bw
+
+bamCoverage -p max -bs 1 --normalizeUsing CPM \
+-b /root/taka/ATAC-seq/bam_rmdup/MPP3_AGED_1.bam  \
+-o /root/taka/ATAC-seq/bw/MPP3_AGED_1.bw
+
+bamCoverage -p max -bs 1 --normalizeUsing CPM \
+-b /root/taka/ATAC-seq/bam_rmdup/MPP3_AGED_2.bam  \
+-o /root/taka/ATAC-seq/bw/MPP3_AGED_2.bw
+
+bamCoverage -p max -bs 1 --normalizeUsing CPM \
+-b /root/taka/ATAC-seq/bam_rmdup/MPP4_YOUNG_1.bam  \
+-o /root/taka/ATAC-seq/bw/MPP4_YOUNG_1.bw
+
+bamCoverage -p max -bs 1 --normalizeUsing CPM \
+-b /root/taka/ATAC-seq/bam_rmdup/MPP4_YOUNG_2.bam  \
+-o /root/taka/ATAC-seq/bw/MPP4_YOUNG_2.bw
+
+bamCoverage -p max -bs 1 --normalizeUsing CPM \
+-b /root/taka/ATAC-seq/bam_rmdup/MPP4_AGED_1.bam  \
+-o /root/taka/ATAC-seq/bw/MPP4_AGED_1.bw
+
+bamCoverage -p max -bs 1 --normalizeUsing CPM \
+-b /root/taka/ATAC-seq/bam_rmdup/MPP4_AGED_2.bam  \
+-o /root/taka/ATAC-seq/bw/MPP4_AGED_2.bw
+
+bamCoverage -p max -bs 1 --normalizeUsing CPM \
+-b /root/taka/ATAC-seq/bam_rmdup/GMP_YOUNG_1.bam  \
+-o /root/taka/ATAC-seq/bw/GMP_YOUNG_1.bw
+
+bamCoverage -p max -bs 1 --normalizeUsing CPM \
+-b /root/taka/ATAC-seq/bam_rmdup/GMP_YOUNG_2.bam  \
+-o /root/taka/ATAC-seq/bw/GMP_YOUNG_2.bw
+
+bamCoverage -p max -bs 1 --normalizeUsing CPM \
+-b /root/taka/ATAC-seq/bam_rmdup/GMP_AGED_1.bam  \
+-o /root/taka/ATAC-seq/bw/GMP_AGED_1.bw
+
+bamCoverage -p max -bs 1 --normalizeUsing CPM \
+-b /root/taka/ATAC-seq/bam_rmdup/GMP_AGED_2.bam  \
+-o /root/taka/ATAC-seq/bw/GMP_AGED_2.bw
+
+bamCoverage -p max -bs 1 --normalizeUsing CPM \
+-b /root/taka/ATAC-seq/bam_rmdup/MEP_YOUNG_1.bam  \
+-o /root/taka/ATAC-seq/bw/MEP_YOUNG_1.bw
+
+bamCoverage -p max -bs 1 --normalizeUsing CPM \
+-b /root/taka/ATAC-seq/bam_rmdup/MEP_YOUNG_2.bam  \
+-o /root/taka/ATAC-seq/bw/MEP_YOUNG_2.bw
+
+bamCoverage -p max -bs 1 --normalizeUsing CPM \
+-b /root/taka/ATAC-seq/bam_rmdup/MEP_AGED_1.bam  \
+-o /root/taka/ATAC-seq/bw/MEP_AGED_1.bw
+
+bamCoverage -p max -bs 1 --normalizeUsing CPM \
+-b /root/taka/ATAC-seq/bam_rmdup/MEP_AGED_2.bam  \
+-o /root/taka/ATAC-seq/bw/MEP_AGED_2.bw
+
+bamCoverage -p max -bs 1 --normalizeUsing CPM \
+-b /root/taka/ATAC-seq/bam_rmdup/CLP_YOUNG_1.bam  \
+-o /root/taka/ATAC-seq/bw/CLP_YOUNG_1.bw
+
+bamCoverage -p max -bs 1 --normalizeUsing CPM \
+-b /root/taka/ATAC-seq/bam_rmdup/CLP_YOUNG_2.bam  \
+-o /root/taka/ATAC-seq/bw/CLP_YOUNG_2.bw
+
+bamCoverage -p max -bs 1 --normalizeUsing CPM \
+-b /root/taka/ATAC-seq/bam_rmdup/CLP_AGED_1.bam  \
+-o /root/taka/ATAC-seq/bw/CLP_AGED_1.bw
+
+bamCoverage -p max -bs 1 --normalizeUsing CPM \
+-b /root/taka/ATAC-seq/bam_rmdup/CLP_AGED_2.bam  \
+-o /root/taka/ATAC-seq/bw/CLP_AGED_2.bw
