@@ -28,8 +28,7 @@ annot.ext="/root/resources/gencode.vM19.annotation.gtf",
 isGTFAnnotationFile=TRUE,
 minMQS=4,
 strandSpecific=0,
-isPairedEnd=TRUE,
-#PE_orientation="rf",
+isPairedEnd=FALSE,
 autosort=TRUE,
 nthreads=40,
 GTF.attrType="gene_name"
@@ -42,3 +41,4 @@ colnames(dat)=c("OH1","OH2","OM1_1","OM1_2","OM2_1","OM2_2","OM3_1","OM3_2","OM4
 
 
 saveRDS(dat,"HSC_counts.rds")
+
