@@ -38,6 +38,7 @@ sink()
 
 dat=data[[1]]
 colnames(dat)=c("OH1","OH2","OM1_1","OM1_2","OM2_1","OM2_2","OM3_1","OM3_2","OM4_1","OM4_2",
-"YH1","YH2","YM1_1","YM1_2","YM2_1","YM2_2","YM3_1","YM3_2","YM4_1","YM4_2",)
+"YH1","YH2","YM1_1","YM1_2","YM2_1","YM2_2","YM3_1","YM3_2","YM4_1","YM4_2")
+
 
 saveRDS(dat,"HSC_counts.rds")
