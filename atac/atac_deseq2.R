@@ -96,6 +96,41 @@ design<-data.frame(cell=c(
 age=c(
 "OLD","OLD","OLD","OLD","OLD","OLD","OLD","OLD","OLD","OLD","OLD","OLD","OLD","OLD","OLD","OLD","OLD","OLD",
 "YOUNG","YOUNG","YOUNG","YOUNG","YOUNG","YOUNG","YOUNG","YOUNG","YOUNG","YOUNG","YOUNG","YOUNG","YOUNG","YOUNG",
-"YOUNG","YOUNG","YOUNG","YOUNG",
+"YOUNG","YOUNG","YOUNG","YOUNG"
 )
 )
+
+
+dLRT <- DESeqDataSetFromMatrix(countData = countData, colData = design, design = ~ cell + age )
+dLRT <- DESeq(dLRT, test="LRT", reduced=~1)
+dLRT_vsd <- varianceStabilizingTransformation(dLRT)
+dLRT_res = results(dLRT)
+vsd = assay(dLRT_vsd)
+saveRDS(vsd,"HSC_vsd.rds")
+saveRDS(dLRT_res,"dLRT_res_anova.rds")
+
+pdf("Diagnostic_pca_all_samples.pdf")
+plotPCA(dLRT_vsd,ntop=20000,intgroup=c("cell","age"))
+dev.off()
+
+track=as.character(design$cell)
+track[track=="HSC"]=1
+track[track=="MPP1"]=2
+track[track=="MPP2"]=3
+track[track=="MPP3"]=4
+track[track=="MPP4"]=5
+track[track=="CLP"]=6
+track[track=="GMP"]=7
+track[track=="MEP"]=8
+
+track=as.numeric(track)
+colores=c("#ffdfba","#ffb3ba","#ffffba","#baffc9","#bae1ff",
+          "#eecbff","#836953","#52494c")
+clab=as.character(colores[track])
+
+track2=as.character(design$age)
+track2[track2=="OLD"]=1
+track2[track2=="YOUNG"]=2
+track2=as.numeric(track2)
+colores2=c("black","grey")
+clab2=as.character(colores2[track2])
