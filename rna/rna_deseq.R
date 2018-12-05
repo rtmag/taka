@@ -69,10 +69,8 @@ vsd = assay(dLRT_vsd)
 saveRDS(vsd,"HSC_vsd.rds")
 
 pdf("Diagnostic_pca_all_samples.pdf")
-plotPCA(dLRT_vsd,ntop=20000,intgroup=c("cell","age"))
+z=plotPCA(dLRT_vsd,ntop=20000,intgroup=c("cell","age"))
 dev.off()
-
-
 
 track=as.character(design$cell)
 track[track=="HSC"]=1
@@ -108,9 +106,9 @@ dev.off()
 
 
 hc <- as.hclust( x$rowDendrogram )
-groups=cutree( hc, k=10 )
+groups=cutree( hc, k=5 )
 track3=as.numeric(groups)
-colores3=rainbow(15)
+colores3=c("#4c516d","#e1cbcb","#db8d8d","#c7c1c7","#897689")
 clab3=(colores3[track3])
 
 png("anova_heatmap_obt.png",width= 3.25,
@@ -121,7 +119,17 @@ labRow = FALSE,xlab="", ylab=paste(dim(sig_vsd)[1],"Genes"),key.title="Gene expr
           ColSideColors=cbind(Cell=clab,Age=clab2),RowSideColors=rbind(Clusters=clab3))
 dev.off()
 
-
-
-legend("topright",legend=c("HSC","MPP1","MPP2","MPP3","MPP4","OLD","YOUNG"),
+pdf("legends.pdf")
+plot(NULL)
+legend("center",legend=c("HSC","MPP1","MPP2","MPP3","MPP4","OLD","YOUNG"),
        fill=c("#ffdfba","#ffb3ba","#ffffba","#baffc9","#bae1ff","black","grey"), border=T, bty="n" )
+dev.off()
+
+write.table(names(which(groups==1)),"anova_cluster1.txt",sep="\t",quote=F,col.names=F,row.names=F)
+write.table(names(which(groups==2)),"anova_cluster4.txt",sep="\t",quote=F,col.names=F,row.names=F)
+write.table(names(which(groups==3)),"anova_cluster2.txt",sep="\t",quote=F,col.names=F,row.names=F)
+write.table(names(which(groups==4)),"anova_cluster5.txt",sep="\t",quote=F,col.names=F,row.names=F)
+write.table(names(which(groups==5)),"anova_cluster3.txt",sep="\t",quote=F,col.names=F,row.names=F)
+
+            
+            
