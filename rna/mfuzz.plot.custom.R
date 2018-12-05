@@ -43,7 +43,7 @@ mfuzz.plot.custom = function (eset, cl, mfrow = c(1, 1), colo, min.mem = 0, time
                 axis(2)
             }
             else {
-                axis(1, 1:dim(exprs(eset))[[2]], time.labels)
+                axis(1, 1:dim(exprs(eset))[[2]], time.labels,cex.axis =cex.axis)
                 axis(2)
             }
         }
@@ -64,7 +64,7 @@ mfuzz.plot.custom = function (eset, cl, mfrow = c(1, 1), colo, min.mem = 0, time
                 axis(2)
             }
             else {
-                axis(1, 1:dim(exprs(eset))[[2]], time.labels)
+                axis(1, 1:dim(exprs(eset))[[2]], time.labels,cex.axis =cex.axis)
                 axis(2)
             }
         }
