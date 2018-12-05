@@ -36,7 +36,7 @@ mfuzz.plot.custom = function (eset, cl, mfrow = c(1, 1), colo, min.mem = 0, time
                 ymax <- max(tmp)
             }
             plot.default(x = NA, xlim = c(1, dim(exprs(eset))[[2]]), 
-                ylim = c(ymin, ymax), xlab = xlabs, ylab = "Expression changes", 
+                ylim = c(ymin, ymax), xlab = xlabs, ylab = "Expression changes",cex.axis =.8, 
                 main = paste("Cluster", j), axes = FALSE)
             if (missing(time.labels)) {
                 axis(1, 1:dim(exprs(eset))[[2]], c(1:dim(exprs(eset))[[2]]))
@@ -57,7 +57,7 @@ mfuzz.plot.custom = function (eset, cl, mfrow = c(1, 1), colo, min.mem = 0, time
                 ymax <- max(tmp)
             }
             plot.default(x = NA, xlim = c(1, dim(exprs(eset))[[2]]), 
-                ylim = c(ymin, ymax), xlab = xlabs, ylab = "Expression changes", 
+                ylim = c(ymin, ymax), xlab = xlabs, ylab = "Expression changes",cex.axis =.8,
                 main = paste("Cluster", j), axes = FALSE)
             if (missing(time.labels)) {
                 axis(1, 1:dim(exprs(eset))[[2]], c(1:dim(exprs(eset))[[2]]))
