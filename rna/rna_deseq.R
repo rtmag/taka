@@ -205,10 +205,82 @@ write.table(names(cl_wt$cluster[cl_wt$cluster==8]) ,"ct_8_rnaseq_Young.txt",quot
 write.table(names(cl_wt$cluster[cl_wt$cluster==9]) ,"ct_9_rnaseq_Young.txt",quote=F,col.names=F,row.names=F,sep="\t")
 ####################################################################################################################################
 
+dLRT <- DESeqDataSetFromMatrix(countData = countData, colData = design, design = ~ cell + age )
+dLRT <- DESeq(dLRT, test="LRT", full= ~ cell + age, reduced=~ cell)
+dds_res <- results(dLRT,contrast=c("age","YOUNG","OLD"))
 
 
+track=as.character(design$cell)
+track[track=="HSC"]=1
+track[track=="MPP1"]=2
+track[track=="MPP2"]=3
+track[track=="MPP3"]=4
+track[track=="MPP4"]=5
+track=as.numeric(track)
+colores=c("#ffdfba","#ffb3ba","#ffffba","#baffc9","#bae1ff")
+clab=as.character(colores[track])
+
+track2=as.character(design$age)
+track2[track2=="OLD"]=1
+track2[track2=="YOUNG"]=2
+track2=as.numeric(track2)
+colores2=c("black","grey")
+clab2=as.character(colores2[track2])
+
+colors <- rev(colorRampPalette( (brewer.pal(9, "RdBu")) )(9))
+
+source("https://raw.githubusercontent.com/rtmag/tumor-meth-pipe/master/heatmap3.R")
+sig_vsd = vsd[which(dLRT_res$padj<0.05 & abs(dds_res$log2FoldChange)>1),]
 
 
+# Volcano
+  title= "YOUNG_VS_OLD_volcano.pdf"
+  pdf(title)
+  plot(dds_res$log2FoldChange,-log10(dds_res$padj),xlab=expression('Log'[2]*paste(' Fold Change ')),
+              ylab=expression('-Log'[10]*' Q-values'),col=alpha("grey",.5),pch=20 )
+  abline(v=-1,lty = 2,col="grey")
+  abline(v=1,lty = 2,col="grey")
+  abline(h=-log10(0.05),lty = 2,col="grey")
+  points(dds_res$log2FoldChange[abs(dds_res$log2FoldChange)>1 & dds_res$padj<0.05],
+       -log10(dds_res$padj)[abs(dds_res$log2FoldChange)>1 & dds_res$padj<0.05],
+      col="red",pch=20)
+  legend("topright", paste("Young",":",length(which(dds_res$log2FoldChange>1.7 & dds_res$padj<0.1))), bty="n") 
+  legend("topleft", paste("Old",":",length(which(dds_res$log2FoldChange<(-1.7) & dds_res$padj<0.1))), bty="n") 
+  dev.off()
+  # Heatmap
+  title="YOUNG_VS_OLD_heatmap.png"
+  sig_vsd = vsd[which(abs(dds_res$log2FoldChange)>1.7 & dds_res$padj<0.1), ]
+  colors <- rev(colorRampPalette( (brewer.pal(9, "RdBu")) )(9))
+x=heatmap.3(sig_vsd,col=colors,scale="row", trace="none",distfun = function(x) get_dist(x,method="pearson"),srtCol=90,
+labRow = FALSE,xlab="", ylab=paste(dim(sig_vsd)[1],"Genes"),key.title="Gene expression",cexCol=.8,
+          ColSideColors=cbind(Cell=clab,Age=clab2))
 
+hc <- as.hclust( x$rowDendrogram )
+groups=cutree( hc, k=4 )
+track3=as.numeric(groups)
+colores3=c("#4c516d","#e1cbcb","#db8d8d","#c7c1c7","#897689")
+clab3=(colores3[track3])
 
+png(title,width= 3.25,
+  height= 3.25,units="in",
+  res=1200,pointsize=4)
+heatmap.3(sig_vsd,col=colors,scale="row", trace="none",distfun = function(x) get_dist(x,method="pearson"),srtCol=90,
+labRow = FALSE,xlab="", ylab=paste(dim(sig_vsd)[1],"Genes"),key.title="Gene expression",cexCol=.8,
+          ColSideColors=cbind(Cell=clab,Age=clab2),RowSideColors=rbind(Clusters=clab3))
+  dev.off()
 
+write.table(names(which(groups==1)),"Young_vs_Old_cluster1.txt",sep="\t",quote=F,col.names=F,row.names=F)
+write.table(names(which(groups==2)),"Young_vs_Old_cluster3.txt",sep="\t",quote=F,col.names=F,row.names=F)
+write.table(names(which(groups==3)),"Young_vs_Old_cluster4.txt",sep="\t",quote=F,col.names=F,row.names=F)
+write.table(names(which(groups==4)),"Young_vs_Old_cluster2.txt",sep="\t",quote=F,col.names=F,row.names=F)
+# MAplot
+  title= "YOUNG_VS_OLD_maplot.pdf"
+  pdf(title)
+  plotMA(dds_res)
+  dev.off()
+# Significant Results ordered by log2FC
+#  csv_table = dds_res[which(dds_res$padj<0.05 & abs(dds_res$log2FoldChange)>1),]
+  csv_table = dds_res
+  csv_table = csv_table[order(csv_table$log2FoldChange),]
+  title= "YOUNG_VS_OLD_differentially_expressed_genes.csv"
+  write.csv(csv_table,title)
