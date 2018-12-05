@@ -69,11 +69,10 @@ vsd = assay(dLRT_vsd)
 saveRDS(vsd,"HSC_vsd.rds")
 
 pdf("Diagnostic_pca_all_samples.pdf")
-plotPCA(dLRT_vsd,ntop=50000,intgroup=c("cell","age"))
+plotPCA(dLRT_vsd,ntop=20000,intgroup=c("cell","age"))
 dev.off()
 
 
-sig_vsd = vsd[which(dLRT_res$padj<0.05),]
 
 track=as.character(design$cell)
 track[track=="HSC"]=1
@@ -95,11 +94,14 @@ clab2=as.character(colores2[track2])
 colors <- rev(colorRampPalette( (brewer.pal(9, "RdBu")) )(9))
 
 source("https://raw.githubusercontent.com/rtmag/tumor-meth-pipe/master/heatmap3.R")
+sig_vsd = vsd[which(dLRT_res$padj<0.01),]
 
 png("anova_heatmap.png",width= 3.25,
   height= 3.25,units="in",
   res=1200,pointsize=4)
 heatmap.3(sig_vsd,col=colors,scale="row", trace="none",distfun = function(x) get_dist(x,method="pearson"),srtCol=90,
-labRow = FALSE,xlab="", ylab=paste(dim(sig_vsd)[1],"Genes"),key.title="Gene expression",cexCol=.8,ColSideColors=rbind(clab,clab2))
-legend("topright",legend=c("Normal","Melanoma","Nevi","MIS"),fill=c("#ffdfba","#ffb3ba","#baffc9","#bae1ff"), border=T, bty="n" )
+labRow = FALSE,xlab="", ylab=paste(dim(sig_vsd)[1],"Genes"),key.title="Gene expression",cexCol=.8,
+          ColSideColors=cbind(Cell=clab,Age=clab2))
+legend("topright",legend=c("HSC","MPP1","MPP2","MPP3","MPP4","OLD","YOUNG"),
+       fill=c("#ffdfba","#ffb3ba","#ffffba","#baffc9","#bae1ff","black","grey"), border=T, bty="n" )
 dev.off()
