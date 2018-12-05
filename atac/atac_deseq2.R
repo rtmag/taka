@@ -179,7 +179,7 @@ png("anova_heatmap_FDR10e-50.png",width= 3.25,
   height= 3.25,units="in",
   res=1200,pointsize=4)
 x = heatmap.3(sig_vsd,col=colors,scale="row", trace="none",distfun = function(x) get_dist(x,method="pearson"),srtCol=90,
-labRow = FALSE,xlab="", ylab=paste(dim(sig_vsd)[1],"Genes"),key.title="Gene expression",cexCol=.8,
+labRow = FALSE,xlab="", ylab=paste(dim(sig_vsd)[1],"ATAC-Seq Peaks"),key.title="Gene expression",cexCol=.6,
           ColSideColors=cbind(Cell=clab,Age=clab2))
 dev.off()
 
@@ -188,7 +188,7 @@ png("anova_heatmap_FDR10e-60.png",width= 3.25,
   height= 3.25,units="in",
   res=1200,pointsize=4)
 x = heatmap.3(sig_vsd,col=colors,scale="row", trace="none",distfun = function(x) get_dist(x,method="pearson"),srtCol=90,
-labRow = FALSE,xlab="", ylab=paste(dim(sig_vsd)[1],"Genes"),key.title="Gene expression",cexCol=.8,
+labRow = FALSE,xlab="", ylab=paste(dim(sig_vsd)[1],"ATAC-Seq Peaks"),key.title="Gene expression",cexCol=.6,
           ColSideColors=cbind(Cell=clab,Age=clab2))
 dev.off()
 
@@ -197,7 +197,7 @@ png("anova_heatmap_FDR10e-70.png",width= 3.25,
   height= 3.25,units="in",
   res=1200,pointsize=4)
 x = heatmap.3(sig_vsd,col=colors,scale="row", trace="none",distfun = function(x) get_dist(x,method="pearson"),srtCol=90,
-labRow = FALSE,xlab="", ylab=paste(dim(sig_vsd)[1],"Genes"),key.title="Gene expression",cexCol=.8,
+labRow = FALSE,xlab="", ylab=paste(dim(sig_vsd)[1],"ATAC-Seq Peaks"),key.title="Gene expression",cexCol=.6,
           ColSideColors=cbind(Cell=clab,Age=clab2))
 dev.off()
-
+######
