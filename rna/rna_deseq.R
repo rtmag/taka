@@ -94,7 +94,7 @@ clab2=as.character(colores2[track2])
 colors <- rev(colorRampPalette( (brewer.pal(9, "RdBu")) )(9))
 
 source("https://raw.githubusercontent.com/rtmag/tumor-meth-pipe/master/heatmap3.R")
-sig_vsd = vsd[which(dLRT_res$padj<0.05),]
+sig_vsd = vsd[which(dLRT_res$padj<0.01),]
 
 png("anova_heatmap.png",width= 3.25,
   height= 3.25,units="in",
