@@ -151,16 +151,64 @@ mean_young = cbind(HY=rowMeans(sig_vsd[,11:12]),
                  M3Y=rowMeans(sig_vsd[,17:18]),
                  M4Y=rowMeans(sig_vsd[,19:20]))
 mean_young = mean_young[apply(mean_young,1,sd)!=0,]
-
+####################################################################################################################################
 wt<-new("ExpressionSet", exprs=as.matrix(mean_old))
 wt.s<-standardise(wt)
 cl_wt<-mfuzz(wt.s,c=9,m=mestimate(wt.s))
-#pdf('RNASEQ_mfuzz_FDR1e-5.pdf')
-mfuzz.plot.custom(wt.s,cl=cl_wt,mfrow=c(3,3),new.window=F,time.labels=c("HSC_O","M1_O","M2_O","M3_O","M4_O"),colo=brewer.pal(9,"YlOrRd"))
-#dev.off(),"H_Y","M1_Y","M2_Y","M3_Y","M4_Y"
-table(cl_wt$cluster)
+saveRDS(cl_wt,"cl_wt_9_Old.rds")
+pdf('RNASEQ_mfuzz_Old_projectOld.pdf')
+mfuzz.plot.custom(wt.s,cl=cl_wt,mfrow=c(3,3),new.window=F,time.labels=c("HSC_O","MPP1_O","MPP2_O","MPP3_O","MPP4_O"),
+                  colo=brewer.pal(9,"PuBuGn"),cex.axis=.65)
+dev.off()
+
+wt<-new("ExpressionSet", exprs=as.matrix(mean_young))
+wt.s<-standardise(wt)
+pdf('RNASEQ_mfuzz_Old_projectYoung.pdf')
+mfuzz.plot.custom(wt.s,cl=cl_wt,mfrow=c(3,3),new.window=F,time.labels=c("HSC_Y","MPP1_Y","MPP2_Y","MPP3_Y","MPP4_Y"),
+                  colo=brewer.pal(9,"YlOrRd"),cex.axis=.65)
+dev.off()
+
+write.table(names(cl_wt$cluster[cl_wt$cluster==1]) ,"ct_1_rnaseq_Old.txt",quote=F,col.names=F,row.names=F,sep="\t")
+write.table(names(cl_wt$cluster[cl_wt$cluster==2]) ,"ct_2_rnaseq_Old.txt",quote=F,col.names=F,row.names=F,sep="\t")
+write.table(names(cl_wt$cluster[cl_wt$cluster==3]) ,"ct_3_rnaseq_Old.txt",quote=F,col.names=F,row.names=F,sep="\t")
+write.table(names(cl_wt$cluster[cl_wt$cluster==4]) ,"ct_4_rnaseq_Old.txt",quote=F,col.names=F,row.names=F,sep="\t")
+write.table(names(cl_wt$cluster[cl_wt$cluster==5]) ,"ct_5_rnaseq_Old.txt",quote=F,col.names=F,row.names=F,sep="\t")
+write.table(names(cl_wt$cluster[cl_wt$cluster==6]) ,"ct_6_rnaseq_Old.txt",quote=F,col.names=F,row.names=F,sep="\t")
+write.table(names(cl_wt$cluster[cl_wt$cluster==7]) ,"ct_7_rnaseq_Old.txt",quote=F,col.names=F,row.names=F,sep="\t")
+write.table(names(cl_wt$cluster[cl_wt$cluster==8]) ,"ct_8_rnaseq_Old.txt",quote=F,col.names=F,row.names=F,sep="\t")
+write.table(names(cl_wt$cluster[cl_wt$cluster==9]) ,"ct_9_rnaseq_Old.txt",quote=F,col.names=F,row.names=F,sep="\t")
+
+wt<-new("ExpressionSet", exprs=as.matrix(mean_young))
+wt.s<-standardise(wt)
+cl_wt<-mfuzz(wt.s,c=9,m=mestimate(wt.s))
+saveRDS(cl_wt,"cl_wt_9_Young.rds")
+pdf('RNASEQ_mfuzz_Young_projectYoung.pdf')
+mfuzz.plot.custom(wt.s,cl=cl_wt,mfrow=c(3,3),new.window=F,time.labels=c("HSC_Y","MPP1_Y","MPP2_Y","MPP3_Y","MPP4_Y"),
+                  colo=brewer.pal(9,"YlOrRd"),cex.axis=.65)
+dev.off()
+
+wt<-new("ExpressionSet", exprs=as.matrix(mean_old))
+wt.s<-standardise(wt)
+pdf('RNASEQ_mfuzz_Young_projectOld.pdf')
+mfuzz.plot.custom(wt.s,cl=cl_wt,mfrow=c(3,3),new.window=F,time.labels=c("HSC_O","MPP1_O","MPP2_O","MPP3_O","MPP4_O"),
+                  colo=brewer.pal(9,"YlOrRd"),cex.axis=.65)
+dev.off()
+
+write.table(names(cl_wt$cluster[cl_wt$cluster==1]) ,"ct_1_rnaseq_Young.txt",quote=F,col.names=F,row.names=F,sep="\t")
+write.table(names(cl_wt$cluster[cl_wt$cluster==2]) ,"ct_2_rnaseq_Young.txt",quote=F,col.names=F,row.names=F,sep="\t")
+write.table(names(cl_wt$cluster[cl_wt$cluster==3]) ,"ct_3_rnaseq_Young.txt",quote=F,col.names=F,row.names=F,sep="\t")
+write.table(names(cl_wt$cluster[cl_wt$cluster==4]) ,"ct_4_rnaseq_Young.txt",quote=F,col.names=F,row.names=F,sep="\t")
+write.table(names(cl_wt$cluster[cl_wt$cluster==5]) ,"ct_5_rnaseq_Young.txt",quote=F,col.names=F,row.names=F,sep="\t")
+write.table(names(cl_wt$cluster[cl_wt$cluster==6]) ,"ct_6_rnaseq_Young.txt",quote=F,col.names=F,row.names=F,sep="\t")
+write.table(names(cl_wt$cluster[cl_wt$cluster==7]) ,"ct_7_rnaseq_Young.txt",quote=F,col.names=F,row.names=F,sep="\t")
+write.table(names(cl_wt$cluster[cl_wt$cluster==8]) ,"ct_8_rnaseq_Young.txt",quote=F,col.names=F,row.names=F,sep="\t")
+write.table(names(cl_wt$cluster[cl_wt$cluster==9]) ,"ct_9_rnaseq_Young.txt",quote=F,col.names=F,row.names=F,sep="\t")
+####################################################################################################################################
 
 
-saveRDS(cl_wt,"cl_wt.rds")
 
-dim(vsd[which(dLRT_res$padj<10e-10),])
+
+
+
+
+
