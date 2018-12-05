@@ -99,9 +99,29 @@ sig_vsd = vsd[which(dLRT_res$padj<0.01),]
 png("anova_heatmap.png",width= 3.25,
   height= 3.25,units="in",
   res=1200,pointsize=4)
-heatmap.3(sig_vsd,col=colors,scale="row", trace="none",distfun = function(x) get_dist(x,method="pearson"),srtCol=90,
+x = heatmap.3(sig_vsd,col=colors,scale="row", trace="none",distfun = function(x) get_dist(x,method="pearson"),srtCol=90,
 labRow = FALSE,xlab="", ylab=paste(dim(sig_vsd)[1],"Genes"),key.title="Gene expression",cexCol=.8,
           ColSideColors=cbind(Cell=clab,Age=clab2))
 legend("topright",legend=c("HSC","MPP1","MPP2","MPP3","MPP4","OLD","YOUNG"),
        fill=c("#ffdfba","#ffb3ba","#ffffba","#baffc9","#bae1ff","black","grey"), border=T, bty="n" )
 dev.off()
+
+
+hc <- as.hclust( x$rowDendrogram )
+groups=cutree( hc, k=10 )
+track3=as.numeric(groups)
+colores3=rainbow(15)
+clab3=(colores3[track3])
+
+png("anova_heatmap_obt.png",width= 3.25,
+  height= 3.25,units="in",
+  res=1200,pointsize=4)
+heatmap.3(sig_vsd,col=colors,scale="row", trace="none",distfun = function(x) get_dist(x,method="pearson"),srtCol=90,
+labRow = FALSE,xlab="", ylab=paste(dim(sig_vsd)[1],"Genes"),key.title="Gene expression",cexCol=.8,
+          ColSideColors=cbind(Cell=clab,Age=clab2),RowSideColors=rbind(Clusters=clab3))
+dev.off()
+
+
+
+legend("topright",legend=c("HSC","MPP1","MPP2","MPP3","MPP4","OLD","YOUNG"),
+       fill=c("#ffdfba","#ffb3ba","#ffffba","#baffc9","#bae1ff","black","grey"), border=T, bty="n" )
