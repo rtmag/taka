@@ -130,6 +130,37 @@ write.table(names(which(groups==2)),"anova_cluster4.txt",sep="\t",quote=F,col.na
 write.table(names(which(groups==3)),"anova_cluster2.txt",sep="\t",quote=F,col.names=F,row.names=F)
 write.table(names(which(groups==4)),"anova_cluster5.txt",sep="\t",quote=F,col.names=F,row.names=F)
 write.table(names(which(groups==5)),"anova_cluster3.txt",sep="\t",quote=F,col.names=F,row.names=F)
+#################################################################################################################################
+# Fuzzy clustering
+library(Mfuzz)
+options(bitmapType="cairo")
+require(Biobase)
+library(RColorBrewer)
+source("https://raw.githubusercontent.com/rtmag/taka/master/rna/mfuzz.plot.custom.R")
 
-            
-            
+mean_old = cbind(HO=rowMeans(sig_vsd[,1:2]),
+                 M1O=rowMeans(sig_vsd[,3:4]),
+                 M2O=rowMeans(sig_vsd[,5:6]),
+                 M3O=rowMeans(sig_vsd[,7:8]),
+                 M4O=rowMeans(sig_vsd[,9:10]))
+mean_old = mean_old[apply(mean_old,1,sd)!=0,]
+              
+mean_young = cbind(HY=rowMeans(sig_vsd[,11:12]),
+                 M1Y=rowMeans(sig_vsd[,13:14]),
+                 M2Y=rowMeans(sig_vsd[,15:16]),
+                 M3Y=rowMeans(sig_vsd[,17:18]),
+                 M4Y=rowMeans(sig_vsd[,19:20]))
+mean_young = mean_young[apply(mean_young,1,sd)!=0,]
+
+wt<-new("ExpressionSet", exprs=as.matrix(mean_old))
+wt.s<-standardise(wt)
+cl_wt<-mfuzz(wt.s,c=9,m=mestimate(wt.s))
+#pdf('RNASEQ_mfuzz_FDR1e-5.pdf')
+mfuzz.plot.custom(wt.s,cl=cl_wt,mfrow=c(3,3),new.window=F,time.labels=c("HSC_O","M1_O","M2_O","M3_O","M4_O"),colo=brewer.pal(9,"YlOrRd"))
+#dev.off(),"H_Y","M1_Y","M2_Y","M3_Y","M4_Y"
+table(cl_wt$cluster)
+
+
+saveRDS(cl_wt,"cl_wt.rds")
+
+dim(vsd[which(dLRT_res$padj<10e-10),])
