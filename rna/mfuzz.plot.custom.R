@@ -1,5 +1,5 @@
 mfuzz.plot.custom = function (eset, cl, mfrow = c(1, 1), colo, min.mem = 0, time.labels, 
-    new.window = TRUE,xlabs="") 
+    new.window = TRUE,xlabs="",cex.axis=1) 
 {
     clusterindex <- cl[[3]]
     memship <- cl[[4]]
@@ -36,7 +36,7 @@ mfuzz.plot.custom = function (eset, cl, mfrow = c(1, 1), colo, min.mem = 0, time
                 ymax <- max(tmp)
             }
             plot.default(x = NA, xlim = c(1, dim(exprs(eset))[[2]]), 
-                ylim = c(ymin, ymax), xlab = xlabs, ylab = "Expression changes",cex.axis =.6, 
+                ylim = c(ymin, ymax), xlab = xlabs, ylab = "Expression changes",cex.axis =cex.axis, 
                 main = paste("Cluster", j), axes = FALSE)
             if (missing(time.labels)) {
                 axis(1, 1:dim(exprs(eset))[[2]], c(1:dim(exprs(eset))[[2]]))
@@ -57,7 +57,7 @@ mfuzz.plot.custom = function (eset, cl, mfrow = c(1, 1), colo, min.mem = 0, time
                 ymax <- max(tmp)
             }
             plot.default(x = NA, xlim = c(1, dim(exprs(eset))[[2]]), 
-                ylim = c(ymin, ymax), xlab = xlabs, ylab = "Expression changes",cex.axis =.6,
+                ylim = c(ymin, ymax), xlab = xlabs, ylab = "Expression changes",cex.axis =cex.axis,
                 main = paste("Cluster", j), axes = FALSE)
             if (missing(time.labels)) {
                 axis(1, 1:dim(exprs(eset))[[2]], c(1:dim(exprs(eset))[[2]]))
