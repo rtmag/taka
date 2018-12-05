@@ -109,9 +109,36 @@ vsd = assay(dLRT_vsd)
 saveRDS(vsd,"HSC_vsd.rds")
 saveRDS(dLRT_res,"dLRT_res_anova.rds")
 
+pca=plotPCA(dLRT_vsd,ntop=20000,intgroup=c("cell","age"),returnData=T)
+
+track=as.character(pca$cell)
+track[track=="HSC"]=1
+track[track=="MPP1"]=2
+track[track=="MPP2"]=3
+track[track=="MPP3"]=4
+track[track=="MPP4"]=5
+track[track=="CLP"]=6
+track[track=="GMP"]=7
+track[track=="MEP"]=8
+track=as.numeric(track)
+colores=c("#508cd7","#64b964","#e6c86e","#FF9900","#9966cc",
+          "#EE1C2E","#6EC5E9","#8e593c")
+clab=as.character(colores[track])
+
+track2=as.character(pca$age)
+track2[track2=="OLD"]=1
+track2[track2=="YOUNG"]=2
+track2=as.numeric(track2)
+colores2=c("17","16")
+clab2=as.character(colores2[track2])
+
 pdf("Diagnostic_pca_all_samples.pdf")
-plotPCA(dLRT_vsd,ntop=20000,intgroup=c("cell","age"))
+plot(pca$PC1,pca$PC2,col=clab,cex=2,xlab="PCA1: 50% variance",ylab="PCA2: 23% variance",pch=as.numeric(clab2))
+legend("topright",legend=c("HSC","MPP1","MPP2","MPP3","MPP4","CLP","GMP","MEP","----","OLD","YOUNG"),
+       col=c("#508cd7","#64b964","#e6c86e","#FF9900","#9966cc","#EE1C2E","#6EC5E9","#8e593c",NA,"grey","grey"), 
+       border=T,pch=c(15,15,15,15,15,15,15,15,NA,17,16),cex=1.5 )
 dev.off()
+
 
 track=as.character(design$cell)
 track[track=="HSC"]=1
@@ -124,8 +151,8 @@ track[track=="GMP"]=7
 track[track=="MEP"]=8
 
 track=as.numeric(track)
-colores=c("#ffdfba","#ffb3ba","#ffffba","#baffc9","#bae1ff",
-          "#eecbff","#836953","#52494c")
+colores=c("#508cd7","#64b964","#e6c86e","#FF9900","#9966cc",
+          "#EE1C2E","#6EC5E9","#8e593c")
 clab=as.character(colores[track])
 
 track2=as.character(design$age)
@@ -134,3 +161,43 @@ track2[track2=="YOUNG"]=2
 track2=as.numeric(track2)
 colores2=c("black","grey")
 clab2=as.character(colores2[track2])
+
+
+colors <- rev(colorRampPalette( (brewer.pal(9, "RdBu")) )(9))
+
+source("https://raw.githubusercontent.com/rtmag/tumor-meth-pipe/master/heatmap3.R")
+
+pdf("legends.pdf")
+plot(NULL)
+legend("center",legend=c("HSC","MPP1","MPP2","MPP3","MPP4","CLP","GMP","MEP","OLD","YOUNG"),
+       fill=c("#508cd7","#64b964","#e6c86e","#FF9900","#9966cc","#EE1C2E","#6EC5E9","#8e593c","black","grey"), 
+       border=T, bty="n",cex=1.5 )
+dev.off()
+
+sig_vsd = vsd[which(dLRT_res$padj<10e-50),]
+png("anova_heatmap_FDR10e-50.png",width= 3.25,
+  height= 3.25,units="in",
+  res=1200,pointsize=4)
+x = heatmap.3(sig_vsd,col=colors,scale="row", trace="none",distfun = function(x) get_dist(x,method="pearson"),srtCol=90,
+labRow = FALSE,xlab="", ylab=paste(dim(sig_vsd)[1],"Genes"),key.title="Gene expression",cexCol=.8,
+          ColSideColors=cbind(Cell=clab,Age=clab2))
+dev.off()
+
+sig_vsd = vsd[which(dLRT_res$padj<10e-60),]
+png("anova_heatmap_FDR10e-60.png",width= 3.25,
+  height= 3.25,units="in",
+  res=1200,pointsize=4)
+x = heatmap.3(sig_vsd,col=colors,scale="row", trace="none",distfun = function(x) get_dist(x,method="pearson"),srtCol=90,
+labRow = FALSE,xlab="", ylab=paste(dim(sig_vsd)[1],"Genes"),key.title="Gene expression",cexCol=.8,
+          ColSideColors=cbind(Cell=clab,Age=clab2))
+dev.off()
+
+sig_vsd = vsd[which(dLRT_res$padj<10e-70),]
+png("anova_heatmap_FDR10e-70.png",width= 3.25,
+  height= 3.25,units="in",
+  res=1200,pointsize=4)
+x = heatmap.3(sig_vsd,col=colors,scale="row", trace="none",distfun = function(x) get_dist(x,method="pearson"),srtCol=90,
+labRow = FALSE,xlab="", ylab=paste(dim(sig_vsd)[1],"Genes"),key.title="Gene expression",cexCol=.8,
+          ColSideColors=cbind(Cell=clab,Age=clab2))
+dev.off()
+
