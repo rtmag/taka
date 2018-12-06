@@ -200,4 +200,42 @@ x = heatmap.3(sig_vsd,col=colors,scale="row", trace="none",distfun = function(x)
 labRow = FALSE,xlab="", ylab=paste(dim(sig_vsd)[1],"ATAC-Seq Peaks"),key.title="Gene expression",cexCol=.6,
           ColSideColors=cbind(Cell=clab,Age=clab2))
 dev.off()
-######
+####################################################################################################################################
+
+dLRT <- DESeqDataSetFromMatrix(countData = countData, colData = design, design = ~ cell + age )
+dLRT <- DESeq(dLRT, test="LRT", full= ~ cell + age, reduced=~ cell)
+dds_res <- results(dLRT,contrast=c("age","YOUNG","OLD"))
+
+track=as.character(design$cell)
+track[track=="HSC"]=1
+track[track=="MPP1"]=2
+track[track=="MPP2"]=3
+track[track=="MPP3"]=4
+track[track=="MPP4"]=5
+track[track=="CLP"]=6
+track[track=="GMP"]=7
+track[track=="MEP"]=8
+
+track=as.numeric(track)
+colores=c("#508cd7","#64b964","#e6c86e","#FF9900","#9966cc",
+          "#EE1C2E","#6EC5E9","#8e593c")
+clab=as.character(colores[track])
+
+track2=as.character(design$age)
+track2[track2=="OLD"]=1
+track2[track2=="YOUNG"]=2
+track2=as.numeric(track2)
+colores2=c("black","grey")
+clab2=as.character(colores2[track2])
+
+vsd<-readRDS("HSC_vsd.rds")
+
+colors <- rev(colorRampPalette( (brewer.pal(9, "RdBu")) )(9))
+sig_vsd = vsd[which(abs(dds_res$log2FoldChange)>1 & dds_res$padj<0.05), ]
+  colors <- rev(colorRampPalette( (brewer.pal(9, "RdBu")) )(9))
+png("Young_VS_Old_heatmap_FDR5e-2_Log2FC1.png",width= 3.25,
+  height= 3.25,units="in",
+  res=1200,pointsize=4)
+x=heatmap.3(sig_vsd,col=colors,scale="row", trace="none",distfun = function(x) get_dist(x,method="pearson"),
+labRow = FALSE,xlab="", ylab=paste(dim(sig_vsd)[1],"ATAC-Seq Peaks"),cexCol=.6,ColSideColors=cbind(Cell=clab,Age=clab2))
+dev.off()
