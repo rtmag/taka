@@ -239,3 +239,65 @@ png("Young_VS_Old_heatmap_FDR5e-2_Log2FC1.png",width= 3.25,
 x=heatmap.3(sig_vsd,col=colors,scale="row", trace="none",distfun = function(x) get_dist(x,method="pearson"),
 labRow = FALSE,xlab="", ylab=paste(dim(sig_vsd)[1],"ATAC-Seq Peaks"),cexCol=.6,ColSideColors=cbind(Cell=clab,Age=clab2))
 dev.off()
+###########################################################################################
+# most variation occurs at HSC
+# All combinations of Young VS OLD
+#######
+############### HSC ######################
+cellType="HSC"
+dLRT <- DESeqDataSetFromMatrix(countData = countData[,which(design$cell==cellType)], 
+                               colData = data.frame(age=design[which(design$cell==cellType),2]), 
+                               design = ~ age )
+dLRT <- DESeq(dLRT)
+dds_res <- results(dLRT,contrast=c("age","YOUNG","OLD"))
+# Volcano
+  title= paste(cellType,"_YOUNG_VS_OLD_volcano.pdf",sep="")
+  pdf(title)
+  plot(dds_res$log2FoldChange,-log10(dds_res$padj),xlab=expression('Log'[2]*paste(' Fold Change ')),
+              ylab=expression('-Log'[10]*' Q-values'),col=alpha("grey",.5),pch=20 )
+  abline(v=-1,lty = 2,col="grey")
+  abline(v=1,lty = 2,col="grey")
+  abline(h=-log10(0.05),lty = 2,col="grey")
+  points(dds_res$log2FoldChange[abs(dds_res$log2FoldChange)>1 & dds_res$padj<0.05],
+       -log10(dds_res$padj)[abs(dds_res$log2FoldChange)>1 & dds_res$padj<0.05],
+      col="red",pch=20)
+  legend("topright", paste(A,":",length(which(dds_res$log2FoldChange>1 & dds_res$padj<0.05))), bty="n") 
+  legend("topleft", paste(B,":",length(which(dds_res$log2FoldChange<(-1) & dds_res$padj<0.05))), bty="n") 
+  dev.off()
+# Heatmap
+  title= paste(A,"_VS_",B,"_heatmap.png",sep="")  
+png(title,width= 3.25,
+  height= 3.25,units="in",
+  res=1200,pointsize=4)
+  sig_vsd = vsd[which(abs(dds_res$log2FoldChange)>1 & dds_res$padj<0.05), c(A_ix, B_ix)]
+  colors <- rev(colorRampPalette( (brewer.pal(9, "RdBu")) )(9))
+  cclab = clab[c(A_ix, B_ix)]
+  heatmap.2(sig_vsd,col=colors,scale="row", trace="none",distfun = function(x) get_dist(x,method="pearson"),srtCol=90,
+  labRow = FALSE,xlab="", ylab=paste(dim(sig_vsd)[1],"Genes"),key.title="Gene expression",cexCol=.8,ColSideColors=cclab)
+  legend("topright",legend=c("Normal","Melanoma","Nevi","MIS"),fill=c("#ffdfba","#ffb3ba","#baffc9","#bae1ff"), border=T, bty="n")
+  dev.off()
+  # Heatmap ALL
+  title= paste(A,"_VS_",B,"_heatmap_all_samples.png",sep="")
+png(title,width= 3.25,
+  height= 3.25,units="in",
+  res=1200,pointsize=4)
+  sig_vsd = vsd[which(abs(dds_res$log2FoldChange)>1 & dds_res$padj<0.05),]
+  colors <- rev(colorRampPalette( (brewer.pal(9, "RdBu")) )(9))
+  heatmap.2(sig_vsd,col=colors,scale="row", trace="none",distfun = function(x) get_dist(x,method="pearson"),srtCol=90,
+  labRow = FALSE,xlab="", ylab=paste(dim(sig_vsd)[1],"Genes"),key.title="Gene expression",cexCol=.8,ColSideColors=clab)
+  legend("topright",legend=c("Normal","Melanoma","Nevi","MIS"),fill=c("#ffdfba","#ffb3ba","#baffc9","#bae1ff"), border=T, bty="n" )
+  dev.off()
+# MAplot
+  title= paste(A,"_VS_",B,"_maplot.pdf",sep="")
+  pdf(title)
+  plotMA(dds_res)
+  dev.off()
+# Significant Results ordered by log2FC
+#  csv_table = dds_res[which(dds_res$padj<0.05 & abs(dds_res$log2FoldChange)>1),]
+  csv_table = dds_res
+  csv_table = csv_table[order(csv_table$log2FoldChange),]
+  title= paste(A,"_VS_",B,"_differentially_expressed_genes.csv",sep="")
+  write.csv(csv_table,title)
+}
+
+deseq_analysis(countData, vsd, A="Normal", A_ix=which(design$cell=="Normal"), B="Nevus", B_ix=which(design$cell=="Nevus"), clab=clab )
