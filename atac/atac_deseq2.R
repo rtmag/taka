@@ -108,6 +108,7 @@ dLRT_res = results(dLRT)
 vsd = assay(dLRT_vsd)
 saveRDS(vsd,"HSC_vsd.rds")
 saveRDS(dLRT_res,"dLRT_res_anova.rds")
+dLRT_res = readRDS("dLRT_res_anova.rds")
 
 pca=plotPCA(dLRT_vsd,ntop=20000,intgroup=c("cell","age"),returnData=T)
 
@@ -174,7 +175,7 @@ legend("center",legend=c("HSC","MPP1","MPP2","MPP3","MPP4","CLP","GMP","MEP","OL
        border=T, bty="n",cex=1.5 )
 dev.off()
 
-sig_vsd = vsd[which(dLRT_res$padj<10e-50),]
+sig_vsd = vsd[which(dLRT_res$padj<10e-70),]
 png("anova_heatmap_FDR10e-50.png",width= 3.25,
   height= 3.25,units="in",
   res=1200,pointsize=4)
@@ -200,6 +201,12 @@ x = heatmap.3(sig_vsd,col=colors,scale="row", trace="none",distfun = function(x)
 labRow = FALSE,xlab="", ylab=paste(dim(sig_vsd)[1],"ATAC-Seq Peaks"),key.title="Gene expression",cexCol=.6,
           ColSideColors=cbind(Cell=clab,Age=clab2))
 dev.off()
+
+hc <- as.hclust( x$rowDendrogram )
+groups=cutree( hc, k=5 )
+track3=as.numeric(groups)
+colores3=c("#4c516d","#e1cbcb","#db8d8d","#c7c1c7","#897689")
+clab3=(colores3[track3])
 ####################################################################################################################################
 
 dLRT <- DESeqDataSetFromMatrix(countData = countData, colData = design, design = ~ cell + age )
