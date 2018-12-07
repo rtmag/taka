@@ -245,6 +245,7 @@ dev.off()
 #######
 ############### HSC ######################
 cellType="HSC"
+deseq_Young_VS_OLD = function(cellType){
 dLRT <- DESeqDataSetFromMatrix(countData = countData[,which(design$cell==cellType)], 
                                colData = data.frame(age=design[which(design$cell==cellType),2]), 
                                design = ~ age )
@@ -302,5 +303,14 @@ library(stringr)
   write.csv(csv_table[which(dds_res$log2FoldChange>1 & dds_res$padj<0.05),],title,row.names=F)
   title= paste(cellType,"_HIGH_OLD_table.csv",sep="")
   write.csv(csv_table[which(dds_res$log2FoldChange<(-1) & dds_res$padj<0.05),],title,row.names=F)
+  }
 ############### HSC ######################
+deseq_Young_VS_OLD(cellType="HSC")
+deseq_Young_VS_OLD(cellType="MPP1")
+deseq_Young_VS_OLD(cellType="MPP2")
+deseq_Young_VS_OLD(cellType="MPP3")
+deseq_Young_VS_OLD(cellType="MPP4")
+deseq_Young_VS_OLD(cellType="CLP")
+deseq_Young_VS_OLD(cellType="GMP")
+deseq_Young_VS_OLD(cellType="MEP")
 
